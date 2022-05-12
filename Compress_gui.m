@@ -1,7 +1,8 @@
-clc;
-clear all;
-close all;
-I = imread('lena512.jpg');
+function Compress_gui(x)
+%clc;
+%clear all;
+%close all;
+I = imread(x);
 % figure, imshow(I);
 % Y = I;
 YCbCr = rgb2ycbcr(I);
