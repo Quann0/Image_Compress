@@ -69,6 +69,9 @@ set (gca, 'ytick' , [])
 axes(handles.axes4)
 set (gca, 'xtick' , [])
 set (gca, 'ytick' , [])
+%a = ['Start' newline 'Compress'];
+handles.pushbutton2.String = 'Start Compress';
+handles.pushbutton2.FontSize = 13.0;
 % Update handles structure
 guidata(hObject, handles);
 % UIWAIT makes GUI wait for user response (see UIRESUME)
@@ -98,6 +101,7 @@ function pushbutton1_Callback(hObject, eventdata, handles)
  imagesc(ImageFile)
  set (gca, 'xtick' , [])
 set (gca, 'ytick' , [])
+handles.pushbutton2.String = 'Start Compress';
 
 
 % --- Executes on button press in pushbutton2.
@@ -105,10 +109,7 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-%Compress_gui(ImageFile)
-%f = getframe(gca);
-%thisImage = f.cdata;
-%imwrite(thisImage, 'inputImage.jpg');
+handles.pushbutton2.String='Compressing..';
 IM=getimage(handles.axes5);
 imwrite(IM, 'inputImage.jpg');
 I = imread('inputImage.jpg');
@@ -120,6 +121,7 @@ YCbCr = rgb2ycbcr(I);
 Y = YCbCr(:,:, 1);
 %subplot(2,2,1);
 %imshow(Y);
+Com = Y;
 axes(handles.axes1)
 imagesc(Y)
 imwrite(Y, 'input.jpg');
@@ -232,7 +234,7 @@ for i=1:r
                     comp = comp + u*v*DQ(m, n)*(cos((((2*(x-1))+1)*(m-1)*pi)/16))*(cos((((2*(y-1))+1)*(n-1)*pi)/16));
                 end
             end
-           bf(x, y) =  round((1/4) *comp + 128);           
+           bf(x, y) =  round((1/4) *comp + 128);            
         end
            end
            Org(s:s+7,e:e+7) = bf;
@@ -258,7 +260,7 @@ set(handles.textByte3,'String',chr);
 set(handles.textByte3,'ForegroundColor',[1 0 0]);
 drawnow;
 
-compare = abs(uint8(Org)-Y);
+compare = abs(uint8(Org)-Com);
 imwrite(compare, 'output_compare.jpg');
 %subplot(2,2,4);
 %imshow(uint8(compare));
@@ -275,6 +277,7 @@ chr = strjoin(Join);
 set(handles.textByte4,'String',chr);
 set(handles.textByte4,'ForegroundColor',[1 0 0]);
 drawnow;
+handles.pushbutton2.String = 'Finish!';
 return;
 
 
