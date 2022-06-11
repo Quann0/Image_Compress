@@ -1,19 +1,20 @@
-function Org = Decompress(q50,rows_num,cols_num,img_bitstream)
+function [Org,block_8x8bitStream,block_bitstream] = Decompress(q50,rows_num,cols_num,img_bitstream)
 
 % % % % % % % % % % % % % % %
 % % DECOMPRESSION
 % % % % % % %
-
+block_8x8bitStream = [];
 rows_index = 1;
 k = 0;
 for i = 1 : rows_num
     cols_index = 1;
     for j = 1 : cols_num
         k = k + 1;
-        img_64bitstream = zeros(1,64);    
+        img_64bitstream = zeros(1,64);
         img_64bitstream(1:32) = img_bitstream(k,1:32);
-        block_bitstream = izigzag(img_64bitstream,8,8);
-        block_quantized = block_bitstream;
+        block_8x8bitStream = [block_8x8bitStream;uint8(img_64bitstream)];
+        block_quantized = izigzag(img_64bitstream,8,8);
+        block_bitstream(rows_index:rows_index+7,cols_index:cols_index+7) = block_quantized;
         %block_quantized = block_all(rows_index:rows_index+7,cols_index:cols_index+7);
         for x=1:8
             for img_Y=1:8
@@ -47,3 +48,5 @@ for i = 1 : rows_num
     end
     rows_index = rows_index + 8;
 end
+
+return;

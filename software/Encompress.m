@@ -1,5 +1,6 @@
-function img_bitstream = Enompress(img_Y,rows_num,cols_num,q50)
+function [img_bitstream,block_quantized_bitStream,block_Encoded_bitStream] = Enompress(img_Y,rows_num,cols_num,q50)
 %% COMPRESSION
+block_Encoded_bitStream = [];
 img_bitStream = [];
 rows_index = 1;
 for i = 1 : rows_num
@@ -40,10 +41,11 @@ for i = 1 : rows_num
                 block_quantized(x, y) = round(block_DCT(x, y)/q50(x, y));
             end
         end
+        block_quantized_bitStream(rows_index:rows_index+7,cols_index:cols_index+7) = block_quantized;
         
         % Block Zigzag encoding
         block_encoded = zigzag(block_quantized);
-        
+        block_Encoded_bitStream = [block_Encoded_bitStream; uint8(block_encoded(1:64))];
         % Reduce encoded data size to 32 bytes
         block_reduced = uint8(block_encoded(1:32));
         img_bitStream = [img_bitStream; block_reduced];
@@ -52,5 +54,7 @@ for i = 1 : rows_num
     end
     rows_index = rows_index + 8;
 end
+block_quantized_bitStream = block_quantized_bitStream;
+block_Encoded_bitStream = block_Encoded_bitStream;
 img_bitstream = img_bitStream;
 return;

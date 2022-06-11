@@ -71,7 +71,7 @@ set (gca, 'ytick' , [])
 handles.pushbutton2.String = 'Start Compress';
 handles.pushbutton2.FontSize = 13.0;
 set(handles.pushbutton2,'Enable','off');
-set(handles.pushbutton4,'Enable','off');
+
 % Update handles structure
 guidata(hObject, handles);
 % UIWAIT makes GUI wait for user response (see UIRESUME)
@@ -126,7 +126,6 @@ global img_Decompress_padding_input
 global img_YCbCr_output
 global img_rgb_output
 handles.text10.String = 'STATUS: COMPRESSING...';
-set(handles.pushbutton4,'Enable','off');
 set(handles.pushbutton2,'Enable','off');
 set(handles.pushbutton1,'Enable','off');
 IM=getimage(handles.axes5);
@@ -177,6 +176,9 @@ q50 = [16 11 10 16 24 40 51 61;
 img_bitstream_encode_input = img_bitstream;
 img_quantized_bitstream = block_quantized_bitstream;
 img_Encoded_bitstream = block_Encoded_bitstream;
+Join = {int2str(img_X_bitstream),'x',int2str(img_Y_bitstream)};
+handles.text15.String = strjoin(Join); 
+set(handles.uitable5,'data',img_bitstream);
 
 %Decompress
 [img_bitstream_decompress,img_64bitstream,block_bitstream] = Decompress(q50,rows_num,cols_num,img_bitstream);
@@ -185,11 +187,19 @@ img_bitstream_decode_input = img_bitstream_decompress;
 img_64Decoded_bitstream = img_64bitstream;
 img_izizagDecoded_bitstream = block_bitstream;
 
+Join = {int2str(img_X_bitstream_decompress),'x',int2str(img_Y_bitstream_decompress)};
+handles.text13.String = strjoin(Join);
+set(handles.uitable3,'data',img_bitstream_decompress);  
+
 %Padding
 [x_img_bitstream_decompress,y_img_bitstream_decompress] = size(img_bitstream_decompress);
 img_Decompress_padding(1:x_img_bitstream_decompress,1:y_img_bitstream_decompress) = img_bitstream_decompress;
 [img_X_Decompress_padding, img_Y_Decompress_padding] = size(img_Decompress_padding);
 img_Decompress_padding_input = img_Decompress_padding;
+
+Join = {int2str(img_X_Decompress_padding),'x',int2str(img_Y_Decompress_padding)};
+handles.text12.String = strjoin(Join);
+set(handles.uitable4,'data',img_Decompress_padding);
 
 %Convert rgb
 img_compress = cat(3,uint8(img_Decompress_padding),img_Cb,img_Cr);
@@ -215,26 +225,24 @@ drawnow;
 
 
 
-% compare = abs(img_compress-img_org);
-% imwrite(compare, 'output_compare.jpg');
-% %subplot(2,2,4);
-% %imshow(uint8(compare));
-% Image4 = imread('output_compare.jpg');
-% axes(handles.axes4)
-% imagesc(Image4)
-%  set (gca, 'xtick' , [])
-% set (gca, 'ytick' , [])
-% s = dir('output_compare.jpg');         
-% filesize = s.bytes;
-% chr = int2str(filesize);
-% Join = {chr,' Byte'};
-% chr = strjoin(Join);
-% set(handles.textByte4,'String',chr);
-% set(handles.textByte4,'ForegroundColor',[1 0 0]);
-% drawnow;
-
+compare = abs(img_compress-img_org);
+imwrite(compare, 'output_compare.jpg');
+%subplot(2,2,4);
+%imshow(uint8(compare));
+Image4 = imread('output_compare.jpg');
+axes(handles.axes4)
+imagesc(Image4)
+ set (gca, 'xtick' , [])
+set (gca, 'ytick' , [])
+s = dir('output_compare.jpg');         
+filesize = s.bytes;
+chr = int2str(filesize);
+Join = {chr,' Byte'};
+chr = strjoin(Join);
+set(handles.textByte4,'String',chr);
+set(handles.textByte4,'ForegroundColor',[1 0 0]);
+drawnow;
 handles.text10.String = 'STATUS: FINISH!';
-set(handles.pushbutton4,'Enable','on');
 set(handles.pushbutton2,'Enable','on');
 set(handles.pushbutton1,'Enable','on');
 return;
