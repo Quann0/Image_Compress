@@ -22,7 +22,7 @@ function varargout = untitled(varargin)
 
 % Edit the above text to modify the response to help untitled
 
-% Last Modified by GUIDE v2.5 11-Jun-2022 19:55:50
+% Last Modified by GUIDE v2.5 10-Jul-2022 23:56:35
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -187,19 +187,6 @@ set(gca,'ycolor',[0.93 0.84 0.84]);
 set (gca, 'xtick' , [])
 set (gca, 'ytick' , [])
 
-axes(handles.axes18)
-arrow_p1 = [1 0.5]; % Startpunkt x1,y1
-arrow_p2 = [-1 0]; % Breite des Pfeils = 0 und Länge des Pfeils mit Richtung -1 (nach unten)
-h=annotation('textarrow','String',[]); % arrow, doublearrow, textarrow
- set(h,'parent', gca, 'position', [arrow_p1,arrow_p2], ... 
-'HeadLength', 5, 'HeadWidth', 15, 'HeadStyle', 'vback2', ...
-'Color', [0 0 0], 'LineWidth', 0.5);
-set(handles.axes18,'Color',[0.93 0.84 0.84]);
-set(gca,'xcolor',[0.93 0.84 0.84]);
-set(gca,'ycolor',[0.93 0.84 0.84]);
-set (gca, 'xtick' , [])
-set (gca, 'ytick' , [])
-
 axes(handles.axes26)
 arrow_p1 = [1 0.5]; % Startpunkt x1,y1
 arrow_p2 = [-1 -1]; % Breite des Pfeils = 0 und Länge des Pfeils mit Richtung -1 (nach unten)
@@ -212,6 +199,20 @@ set(gca,'xcolor',[0.93 0.84 0.84]);
 set(gca,'ycolor',[0.93 0.84 0.84]);
 set (gca, 'xtick' , [])
 set (gca, 'ytick' , [])
+
+axes(handles.axes32)
+arrow_p1 = [1 0.5]; % Startpunkt x1,y1
+arrow_p2 = [-1 -1]; % Breite des Pfeils = 0 und Länge des Pfeils mit Richtung -1 (nach unten)
+h=annotation('textarrow','String',[]); % arrow, doublearrow, textarrow
+ set(h,'parent', gca, 'position', [arrow_p1,arrow_p2], ... 
+'HeadLength', 5, 'HeadWidth', 15, 'HeadStyle', 'vback2', ...
+'Color', [0 0 0], 'LineWidth', 0.5);
+set(handles.axes32,'Color',[0.93 0.84 0.84]);
+set(gca,'xcolor',[0.93 0.84 0.84]);
+set(gca,'ycolor',[0.93 0.84 0.84]);
+set (gca, 'xtick' , [])
+set (gca, 'ytick' , [])
+
 
 axes(handles.axes27)
 arrow_p1 = [1 0.5]; % Startpunkt x1,y1
@@ -239,6 +240,19 @@ set(gca,'ycolor',[0.93 0.84 0.84]);
 set (gca, 'xtick' , [])
 set (gca, 'ytick' , [])
 
+axes(handles.axes18)
+arrow_p1 = [1 0]; % Startpunkt x1,y1
+arrow_p2 = [0 1]; % Breite des Pfeils = 0 und Länge des Pfeils mit Richtung -1 (nach unten)
+h=annotation('textarrow','String',[]); % arrow, doublearrow, textarrow
+ set(h,'parent', gca, 'position', [arrow_p1,arrow_p2], ...
+'HeadLength', 5, 'HeadWidth', 15, 'HeadStyle', 'vback2', ...
+'Color', [0 0 0], 'LineWidth', 0.5);
+set(handles.axes18,'Color',[0.93 0.84 0.84]);
+set(gca,'xcolor',[0.93 0.84 0.84]);
+set(gca,'ycolor',[0.93 0.84 0.84]);
+set (gca, 'xtick' , [])
+set (gca, 'ytick' , [])
+
 axes(handles.axes24)
 arrow_p1 = [1 0.5]; % Startpunkt x1,y1
 arrow_p2 = [-1 0]; % Breite des Pfeils = 0 und Länge des Pfeils mit Richtung -1 (nach unten)
@@ -252,18 +266,6 @@ set(gca,'ycolor',[0.93 0.84 0.84]);
 set (gca, 'xtick' , [])
 set (gca, 'ytick' , [])
 
-axes(handles.axes32)
-arrow_p1 = [1 0.5]; % Startpunkt x1,y1
-arrow_p2 = [-1 0]; % Breite des Pfeils = 0 und Länge des Pfeils mit Richtung -1 (nach unten)
-h=annotation('textarrow','String',[]); % arrow, doublearrow, textarrow
- set(h,'parent', gca, 'position', [arrow_p1,arrow_p2], ...
-'HeadLength', 5, 'HeadWidth', 15, 'HeadStyle', 'vback2', ...
-'Color', [0 0 0], 'LineWidth', 0.5);
-set(handles.axes32,'Color',[0.93 0.84 0.84]);
-set(gca,'xcolor',[0.93 0.84 0.84]);
-set(gca,'ycolor',[0.93 0.84 0.84]);
-set (gca, 'xtick' , [])
-set (gca, 'ytick' , [])
 
 axes(handles.axes30)
 arrow_p1 = [1 0.5]; % Startpunkt x1,y1
@@ -407,6 +409,10 @@ axes(handles.axes31)
 imagesc(img_rgb_output);
 set (gca, 'xtick' , [])
 set (gca, 'ytick' , [])
+
+
+psnr1 = getappdata(0,'ovalue');
+handles.edit22.String = num2str(psnr1);
 
 % Update handles structure
 guidata(hObject, handles);
@@ -876,6 +882,29 @@ function edit20_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function edit20_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to edit20 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit22_Callback(hObject, eventdata, handles)
+% hObject    handle to edit22 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit22 as text
+%        str2double(get(hObject,'String')) returns contents of edit22 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit22_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit22 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 

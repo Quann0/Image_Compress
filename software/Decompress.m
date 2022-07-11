@@ -21,6 +21,7 @@ for i = 1 : rows_num
                 DQ(x, img_Y) = q50(x, img_Y)*block_quantized(x, img_Y);
             end
         end
+        
         for x = 1:8
             for img_Y = 1:8
                 comp = 0;
@@ -40,6 +41,7 @@ for i = 1 : rows_num
                         comp = comp + u*v*DQ(m, n)*(cos((((2*(x-1))+1)*(m-1)*pi)/16))*(cos((((2*(img_Y-1))+1)*(n-1)*pi)/16));
                     end
                 end
+                %bf(x, img_Y) =  round((1/4) *comp);
                 bf(x, img_Y) =  round((1/4) *comp + 128);
             end
         end

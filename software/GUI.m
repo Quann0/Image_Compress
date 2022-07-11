@@ -1,6 +1,6 @@
 function varargout = GUI(varargin)
 % GUI MATLAB code for GUI.fig
-%      GUI, by itself, creates a new GUI or raises the existing
+%      GUI, by i  self, creates a new GUI or raises the existing
 %      singleton*.
 %
 %      H = GUI returns the handle to a new GUI or the handle to
@@ -125,6 +125,7 @@ global img_bitstream_decode_input
 global img_Decompress_padding_input
 global img_YCbCr_output
 global img_rgb_output
+global psnr1;
 handles.text10.String = 'STATUS: COMPRESSING...';
 set(handles.pushbutton4,'Enable','off');
 set(handles.pushbutton2,'Enable','off');
@@ -147,10 +148,13 @@ set(handles.textByte1,'String',chr);
 set(handles.textByte1,'ForegroundColor',[1 0 0]);
 drawnow;
 %convert ycbcr
+
 img_YCbCr = rgb2ycbcr(img_org);
 img_Y = img_YCbCr(:,:, 1);
 img_Cb = img_YCbCr(:,:, 2);
 img_Cr = img_YCbCr(:,:, 3);
+imwrite(img_YCbCr, 'YCbCr.jpg');
+imwrite(img_Y, 'img_Y.jpg');
 
 img_org_input = img_org;
 img_YCbCr_input = img_YCbCr;
@@ -173,14 +177,15 @@ q50 = [16 11 10 16 24 40 51 61;
     72 92 95 98 112 100 103 99];
 %Encompress
 [img_bitstream,block_quantized_bitstream,block_Encoded_bitstream] = Encompress(img_Y,rows_num,cols_num,q50);
-[img_X_bitstream,img_Y_bitstream] = size(img_bitstream);
+% [img_X_bitstream,img_Y_bitstream] = size(img_bitstream);
 img_bitstream_encode_input = img_bitstream;
 img_quantized_bitstream = block_quantized_bitstream;
 img_Encoded_bitstream = block_Encoded_bitstream;
 
+
 %Decompress
 [img_bitstream_decompress,img_64bitstream,block_bitstream] = Decompress(q50,rows_num,cols_num,img_bitstream);
-[img_X_bitstream_decompress, img_Y_bitstream_decompress] = size(img_bitstream_decompress);
+% [img_X_bitstream_decompress, img_Y_bitstream_decompress] = size(img_bitstream_decompress);
 img_bitstream_decode_input = img_bitstream_decompress;
 img_64Decoded_bitstream = img_64bitstream;
 img_izizagDecoded_bitstream = block_bitstream;
@@ -188,7 +193,7 @@ img_izizagDecoded_bitstream = block_bitstream;
 %Padding
 [x_img_bitstream_decompress,y_img_bitstream_decompress] = size(img_bitstream_decompress);
 img_Decompress_padding(1:x_img_bitstream_decompress,1:y_img_bitstream_decompress) = img_bitstream_decompress;
-[img_X_Decompress_padding, img_Y_Decompress_padding] = size(img_Decompress_padding);
+% [img_X_Decompress_padding, img_Y_Decompress_padding] = size(img_Decompress_padding);
 img_Decompress_padding_input = img_Decompress_padding;
 
 %Convert rgb
@@ -197,7 +202,14 @@ img_YCbCr_output = img_compress;
 img_compress = ycbcr2rgb(img_compress);
 img_rgb_output = img_compress;
 
-imwrite(uint8(img_compress), 'output.jpg');
+
+%psnr
+peaksnr = psnr(uint8(img_Decompress_padding),img_Y);
+psnr1 = peaksnr;
+
+%imwrite(uint8(img_compress), 'output.jpg');
+imwrite(img_compress, 'output.jpg');
+
 Image3 = imread('output.jpg');
 axes(handles.axes3)
 imagesc(Image3)
@@ -211,27 +223,6 @@ chr = strjoin(Join);
 set(handles.textByte3,'String',chr);
 set(handles.textByte3,'ForegroundColor',[1 0 0]);
 drawnow;
-
-
-
-
-% compare = abs(img_compress-img_org);
-% imwrite(compare, 'output_compare.jpg');
-% %subplot(2,2,4);
-% %imshow(uint8(compare));
-% Image4 = imread('output_compare.jpg');
-% axes(handles.axes4)
-% imagesc(Image4)
-%  set (gca, 'xtick' , [])
-% set (gca, 'ytick' , [])
-% s = dir('output_compare.jpg');         
-% filesize = s.bytes;
-% chr = int2str(filesize);
-% Join = {chr,' Byte'};
-% chr = strjoin(Join);
-% set(handles.textByte4,'String',chr);
-% set(handles.textByte4,'ForegroundColor',[1 0 0]);
-% drawnow;
 
 handles.text10.String = 'STATUS: FINISH!';
 set(handles.pushbutton4,'Enable','on');
@@ -384,6 +375,7 @@ global img_bitstream_decode_input
 global img_Decompress_padding_input
 global img_YCbCr_output
 global img_rgb_output
+global psnr1;
 setappdata(0,'avalue',img_org_input);
 setappdata(0,'bvalue',img_YCbCr_input);
 setappdata(0,'cvalue',img_Y_input);
@@ -398,4 +390,7 @@ setappdata(0,'kvalue',img_bitstream_decode_input);
 setappdata(0,'lvalue',img_Decompress_padding_input);
 setappdata(0,'mvalue',img_YCbCr_output);
 setappdata(0,'nvalue',img_rgb_output);
+setappdata(0,'ovalue',psnr1);
+
+
 untitled(varargin1);
